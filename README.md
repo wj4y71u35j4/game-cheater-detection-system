@@ -32,10 +32,6 @@ docker run -p 4000:80 -v "D:/1.-Projects/Ran2_analysis/game-cheater-detection-ju
 
 After running the Docker container, a file named `cheater-list.csv` will be created in the same directory as your excel log file. This file contains the list of detected cheaters.
 
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

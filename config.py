@@ -5,3 +5,5 @@ CNN_prob_threshold = 0.5
 
 # CLF 預測機率高於90%以上會納入cheater list
 CLF_prob_threshold = 0.9
+
+# Condition 1

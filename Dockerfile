@@ -15,13 +15,14 @@ RUN adduser --disabled-password --gecos "" user
 # Change the ownership of the /app directory to the new user
 RUN chown -R user:user /app
 
+# Create 'data' directories
+RUN mkdir data
+
 # Switch to the new user
 USER user
 
 # Copy the project files into the container.
-COPY ./data ./data
 COPY ./models ./models
-COPY ./output ./output
 COPY ./*.py ./
 
 # Expose the port the app runs on

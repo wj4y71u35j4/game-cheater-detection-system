@@ -9,7 +9,9 @@ from clf_predictor import ClassifierPredictor
 
 def main():
     print("loading...")
-    df_timediff = pd.read_excel("data/log_20230726.xlsx", sheet_name="120秒內解除轉轉樂紀錄")
+    # df_timediff = pd.read_excel("data/log_20230726.xlsx", sheet_name="120秒內解除轉轉樂紀錄")
+    df_timediff = load_excel_sheet("data", sheet_name="120秒內解除轉轉樂紀錄")
+    print("data has been successfully loaded")
 
     df_validation = df_timediff[["ChaNum", "ChaName", "UserID"]].drop_duplicates().reset_index(drop=True)
     print('processing playInSusMapRate...')
@@ -94,9 +96,15 @@ def main():
     union_userid = np.union1d(union_userid, cheater_list_3)
     df_combined = pd.DataFrame({'UserID': union_userid})
 
-    df_combined.to_csv('/app/data/cheater-list.csv', index=False)
-    # df_combined.to_csv('output/cheater-list.csv', index=False)
+    print("-----------------------------")
+    print("-----------------------------")
+    print("final cheater list")
     print(df_combined)
+    print("-----------------------------")
+    print("-----------------------------")
+    df_combined.to_csv('/app/data/cheater-list.csv', index=False)
+    print("final cheater list has been saved to your folder")
+    # df_combined.to_csv('output/cheater-list.csv', index=False)
 
 
 

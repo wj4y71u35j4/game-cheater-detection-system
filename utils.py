@@ -6,6 +6,41 @@ import os
 import re
 from collections import Counter
 
+import os
+import pandas as pd
+
+def load_excel_sheet(directory, sheet_name='120秒內解除轉轉樂紀錄'):
+    """
+    Load a specified sheet from an Excel file in a given directory.
+
+    Args:
+        directory (str): The directory where the Excel file is located.
+        sheet_name (str): The name of the sheet to load from the Excel file.
+
+    Returns:
+        pd.DataFrame: The data from the specified Excel sheet.
+
+    Raises:
+        ValueError: If the directory contains no Excel files or more than one Excel file,
+                    or if the Excel file does not contain a sheet with the specified name.
+    """
+    files = os.listdir(directory)
+    excel_files = [f for f in files if f.endswith('.xlsx')]
+
+    if len(excel_files) > 1:
+        raise ValueError('There should only be one Excel file in the directory.')
+    elif len(excel_files) == 0:
+        raise ValueError('No Excel file found in the directory.')
+    else:
+        file_path = os.path.join(directory, excel_files[0])
+        try:
+            df = pd.read_excel(file_path, sheet_name=sheet_name)
+        except Exception as e:
+            raise ValueError(f"The Excel file does not contain a sheet named '{sheet_name}'.")
+
+    return df
+
+
 def generate_playInSusMapRate(df_validation, df_timediff, sus_map_index):
     total_map_count = df_timediff.groupby('ChaNum')['mapId'].count()
     sus_map_count = df_timediff[df_timediff['mapId'].isin(sus_map_index)].groupby('ChaNum')['mapId'].count()

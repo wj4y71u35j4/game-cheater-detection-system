@@ -44,7 +44,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 * [Docker](https://www.docker.com/what-docker)
 * [Python](https://www.python.org/)
-
-Enjoy detecting cheaters in your game!
-
-Please note: This README is just a template and might need to be adjusted to fit your specific needs, especially the Contributing, License, and Acknowledgments sections. It's important to ensure that the paths and commands are accurate for users who want to build and run your Docker image.

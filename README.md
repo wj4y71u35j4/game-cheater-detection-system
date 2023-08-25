@@ -25,7 +25,7 @@ To run the system, you need to specify the directory containing only one Excel d
 Use the following command to run the system:
 
 ```bash
-docker run -p 4000:80 -v "D:/1.-Projects/Ran2_analysis/game-cheater-detection-jupyter/data":/app/data cheater-detection
+docker run -p 4000:80 -v "path/to/your/excel/folder":/app/data cheater-detection
 ```
 
 ### Output

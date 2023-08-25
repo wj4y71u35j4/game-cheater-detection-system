@@ -34,7 +34,7 @@ def load_excel_sheet(directory, sheet_name='120秒內解除轉轉樂紀錄'):
     else:
         file_path = os.path.join(directory, excel_files[0])
         try:
-            df = pd.read_excel(file_path, sheet_name=sheet_name)
+            df = pd.read_excel(file_path, sheet_name=sheet_name, dtype={'UserID': str})
         except Exception as e:
             raise ValueError(f"The Excel file does not contain a sheet named '{sheet_name}'.")
 
@@ -189,6 +189,48 @@ def generate_timediffCountdiff(df_validation, df_timediff):
 
     df_validation['timediffCountdiff'] = df_validation.apply(assign_timediffCountdiff, axis=1)
     return df_validation
+
+def generate_iplist(df_combined, df_timediff):
+    # Select the necessary columns
+    df = df_timediff[["UserID", 'clientIP']]
+
+    # Group by 'UserID' and aggregate unique 'clientIP' for each group
+    grouped_data = df.groupby('UserID')['clientIP'].unique().reset_index()
+
+    # convert the list of IPs to a string representation of the list
+    grouped_data['clientIP'] = grouped_data['clientIP'].apply(lambda x: list(x))
+
+    # Rename the columns for clarity
+    grouped_data.columns = ['UserID', 'Unique_ClientIPs']
+
+    # Merge the grouped data with the original data
+    df_combined = df_combined.merge(grouped_data, on='UserID', how='left')
+
+    return df_combined
+
+def generate_exemptionlist(df_combined, userID_examption, ip_examption):
+    # Function to check exemption
+    def check_exemption(row):
+        # Check if UserID is in userID_examption
+        if row['UserID'] in userID_examption:
+            return 1
+
+        # Convert the string representation of the list to an actual list
+        # ips = row['Unique_ClientIPs'].strip("[]").replace("'", "").split()
+        ips = row['Unique_ClientIPs']
+
+        # Check if any IP from the Unique_ClientIPs is in rich_ip
+        for ip in ips:
+            if ip in ip_examption:
+                print(f"UserID {row['UserID']} is exempted because of IP {ip} is in examption list")
+                return 1
+
+        return 0
+
+    # Apply the check_exemption function row-wise and assign the result to the 'Exemption' column
+    df_combined['Exemption'] = df_combined.apply(check_exemption, axis=1)
+
+    return df_combined
 
 def saveTimediffPlot(df_cha, ChaNum, folder):
     plt.cla()

@@ -20,7 +20,7 @@ docker build -t cheater-detection .
 
 ### Running the System
 
-To run the system, you need to specify the directory containing only one Excel data file (`e.g. log_20230726.xlsx`). Replace the `"ath/to/your/excel/folder"` path in the command below with the path to your Excel file folder. Please ensure the Excel file contains a sheet named "120秒內解除轉轉樂紀錄".
+To run the system, you need to specify the directory containing only one Excel data file (`e.g. log_20230726.xlsx`). Replace the `"path/to/your/excel/folder"` path in the command below with the path to your Excel file folder. Please ensure the Excel file contains a sheet named "120秒內解除轉轉樂紀錄".
 
 Use the following command to run the system:
 

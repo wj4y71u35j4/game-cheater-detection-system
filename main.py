@@ -102,9 +102,9 @@ def main():
     print(f"Number of cheaters exempted: {exempted_cheaters}")
     print("-----------------------------")
     print("-----------------------------")
-    # df_combined.to_csv('/app/data/cheater-list.csv', index=False)
+    df_combined.to_csv('/app/data/cheater-list.csv', index=False)
     print("final cheater list has been saved to your folder")
-    df_combined.to_excel('output/cheater-list.xlsx', index=False)
+    # df_combined.to_excel('output/cheater-list.xlsx', index=False)
 
 
 if __name__ == '__main__':

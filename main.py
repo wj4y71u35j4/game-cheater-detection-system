@@ -54,7 +54,6 @@ def main():
     image_predictor.preprocess_images()
     image_predictor.predict()
     image_predictor.create_dataframe()
-    # print(image_predictor.df_cnn)
 
     # assume you have a DataFrame df_validation
     clf_model_path = "models/clf-model-v2.h5"
@@ -63,7 +62,6 @@ def main():
     clf_predictor = ClassifierPredictor(clf_model_path, df_validation)
     clf_predictor.load_model()
     clf_predictor.predict()
-    # print(clf_predictor.df_validation)
 
     print("filtering the list and creating a cheater list...")
     df_clf_pred = clf_predictor.df_validation[clf_predictor.df_validation['Predicted_Probability']>cfg.CLF_prob_threshold]['UserID']
@@ -103,8 +101,11 @@ def main():
     print("-----------------------------")
     print("-----------------------------")
     df_combined.to_csv('/app/data/cheater-list.csv', index=False)
-    print("final cheater list has been saved to your folder")
     # df_combined.to_excel('output/cheater-list.xlsx', index=False)
+    print("final cheater list has been saved to your folder")
+    for UserID in tqdm(df_combined['UserID'].unique(), desc="Output the timediff image based on UserID", unit='player'):
+        df = df_timediff[(df_timediff['UserID'] == UserID)]
+        saveTimediffPlot(df, UserID, "/app/data")
 
 
 if __name__ == '__main__':

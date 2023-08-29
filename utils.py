@@ -9,7 +9,7 @@ from collections import Counter
 import os
 import pandas as pd
 
-def load_excel_sheet(directory, sheet_name='120秒內解除轉轉樂紀錄'):
+def load_excel_sheet(directory, sheet_name='120秒內解除轉轉樂紀錄', sheet_times='轉轉樂啟動次數記錄'):
     """
     Load a specified sheet from an Excel file in a given directory.
 
@@ -34,11 +34,12 @@ def load_excel_sheet(directory, sheet_name='120秒內解除轉轉樂紀錄'):
     else:
         file_path = os.path.join(directory, excel_files[0])
         try:
-            df = pd.read_excel(file_path, sheet_name=sheet_name, dtype={'UserID': str})
+            df_timediff = pd.read_excel(file_path, sheet_name=sheet_name, dtype={'UserID': str})
+            df_times = pd.read_excel(file_path, sheet_name=sheet_times, dtype={'UserID': str})
         except Exception as e:
             raise ValueError(f"The Excel file does not contain a sheet named '{sheet_name}'.")
 
-    return df
+    return df_timediff, df_times
 
 
 def generate_playInSusMapRate(df_validation, df_timediff, sus_map_index):
@@ -231,6 +232,46 @@ def generate_exemptionlist(df_combined, userID_examption, ip_examption):
     df_combined['Exemption'] = df_combined.apply(check_exemption, axis=1)
 
     return df_combined
+
+def generate_ip_count_dict(df_combined):
+    # create a dictionary to calculate the times of each ip
+    ip_count_dict = {}
+    for ip_list in df_combined['Unique_ClientIPs']:
+        for ip in ip_list:
+            if ip in ip_count_dict:
+                ip_count_dict[ip] += 1
+            else:
+                ip_count_dict[ip] = 1
+
+    # return the ip_count_dict
+    return ip_count_dict
+
+def generate_ip_max_count(df_combined, ip_count_dict):
+    # create a new column to store the max count of ip
+    df_combined['ip_max_count'] = 0
+
+    # assign the max count of ip to the new column
+    for index, row in df_combined.iterrows():
+        ip_list = row['Unique_ClientIPs']
+        max_count = 0
+        for ip in ip_list:
+            if ip_count_dict[ip] > max_count:
+                max_count = ip_count_dict[ip]
+                max_ip = ip
+        df_combined.loc[index, 'ip_max_count'] = max_count
+        # if max_count > 3, then print the UserID, ip and its count
+        if max_count > 3:
+            print(f"UserID {row['UserID']} has IP {ip} with max count {max_count}")
+
+    # return the df_combined
+    return df_combined
+
+# generate total times grouped by UserID
+def generate_total_times(df_combined, df_times):
+    group = df_times.groupby('UserID')['times'].sum()
+    df_combined = pd.merge(df_combined, group, on='UserID', how='left')
+    return df_combined
+
 
 def saveTimediffPlot(df_cha, ChaNum, folder):
     plt.cla()

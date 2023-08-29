@@ -14,7 +14,7 @@ def main():
     # Ignore specific warnings
     warnings.filterwarnings("ignore", category=RuntimeWarning, module="numpy.lib.function_base")
     print("data loading...")
-    df_timediff = load_excel_sheet("data", sheet_name="120秒內解除轉轉樂紀錄")
+    df_timediff, df_times = load_excel_sheet("data", sheet_name="120秒內解除轉轉樂紀錄", sheet_times='轉轉樂啟動次數記錄')
     print("data has been successfully loaded")
 
     print("data preprocessing 0%")
@@ -92,6 +92,12 @@ def main():
     print("generate examption list...")
     df_combined = generate_exemptionlist(df_combined, cfg.userID_examption, cfg.ip_examption)
 
+    print("generate ip count dict...")
+    ip_count_dict = generate_ip_count_dict(df_combined)
+    df_combined = generate_ip_max_count(df_combined, ip_count_dict)
+
+    print("generate total game activated count...")
+    df_combined = generate_total_times(df_combined, df_times)
     print("-----------------------------")
     print("-----------------------------")
     total_cheaters = len(df_combined)
@@ -100,12 +106,11 @@ def main():
     print(f"Number of cheaters exempted: {exempted_cheaters}")
     print("-----------------------------")
     print("-----------------------------")
-    df_combined.to_csv('/app/data/cheater-list.csv', index=False)
-    # df_combined.to_excel('output/cheater-list.xlsx', index=False)
+    df_combined.to_excel('/app/data/cheater-list.xlsx', index=False)
     print("final cheater list has been saved to your folder")
     for UserID in tqdm(df_combined['UserID'].unique(), desc="Output the timediff image based on UserID", unit='player'):
         df = df_timediff[(df_timediff['UserID'] == UserID)]
-        saveTimediffPlot(df, UserID, "/app/data")
+        saveTimediffPlot(df, UserID, "/app/data/images")
 
 
 if __name__ == '__main__':

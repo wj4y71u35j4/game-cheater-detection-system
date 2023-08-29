@@ -30,7 +30,15 @@ docker run -p 4000:80 -v "path/to/your/excel/folder":/app/data cheater-detection
 
 ### Output
 
-After running the Docker container, a file named `cheater-list.csv` will be created in the same directory as your excel log file. This file contains the list of detected cheaters.
+After running the Docker container, a file named `cheater-list.xlsx` will be created in the same directory as your excel log file. This file contains the list of detected cheaters.
+
+| Column Name      | Description                                                                                       |
+|------------------|---------------------------------------------------------------------------------------------------|
+| UserID           | Identifies each cheater.                                                                          |
+| Unique_ClientIPs | Represents the list of unique IPs that have been used in the game.                                 |
+| exemption        | If `1`, the user is in the exemption list; if `0`, the user is not.                               |
+| ip_max_count     | Shows the maximum times an IP appears among the cheater list.                                     |
+| times            | Represents the number of times the cheater game detection was activated for each `UserID`.         |
 
 ## Acknowledgments
 

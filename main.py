@@ -108,7 +108,7 @@ def main():
     print("-----------------------------")
     df_combined.to_excel('/app/data/cheater-list.xlsx', index=False)
     print("final cheater list has been saved to your folder")
-    for UserID in tqdm(df_combined['UserID'].unique(), desc="Output the timediff image based on UserID", unit='player'):
+    for UserID in tqdm(df_combined['UserID'].unique(), desc="Output the timediff image based on UserID...", unit='player'):
         df = df_timediff[(df_timediff['UserID'] == UserID)]
         saveTimediffPlot(df, UserID, "/app/data/images")
 

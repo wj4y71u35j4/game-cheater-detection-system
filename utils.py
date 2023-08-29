@@ -259,8 +259,8 @@ def generate_ip_max_count(df_combined, ip_count_dict):
                 max_count = ip_count_dict[ip]
                 max_ip = ip
         df_combined.loc[index, 'ip_max_count'] = max_count
-        # if max_count > 3, then print the UserID, ip and its count
-        if max_count > 3:
+        # if max_count >= 3, then print the UserID, ip and its count
+        if max_count >= 3:
             print(f"UserID {row['UserID']} has IP {ip} with max count {max_count}")
 
     # return the df_combined

@@ -40,6 +40,8 @@ After running the Docker container, a file named `cheater-list.xlsx` will be cre
 | ip_max_count     | Shows the maximum times an IP appears among the cheater list.                                     |
 | times            | Represents the number of times the cheater game detection was activated for each `UserID`.         |
 
+if you're interested in the ip with the maximum times htat list on the cheater list, you can check the terminal to confirm which ip is repeated.
+
 ## Acknowledgments
 
 * [Docker](https://www.docker.com/what-docker)
